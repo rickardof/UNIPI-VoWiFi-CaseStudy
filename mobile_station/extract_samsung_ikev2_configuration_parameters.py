@@ -99,7 +99,7 @@ def evaluate_samsung_apn_file(samsungxml,outfile):
 
 def main():
 	parser = argparse.ArgumentParser()
-	parser.add_argument("-s", "--samsungfile", required=False, type=str, default="devices_confs/Samsung/epdg_apns_conf.xml", help="File including samsung ikve2 configuration as xml")
+	parser.add_argument("-s", "--samsungfile", required=False, type=str, default="devices_confs/Samsung/samsung_epdg_apns_conf.xml", help="File including samsung ikve2 configuration as xml")
 	parser.add_argument("-o", "--outfile", required=False, type=str, default="devices_confs/Samsung/samsung_ikev2_conf.json", help="File including samsung ikve2 configuration as xml")
 
 	args=parser.parse_args()

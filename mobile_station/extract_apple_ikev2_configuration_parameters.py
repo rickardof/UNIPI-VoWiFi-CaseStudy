@@ -1,31 +1,20 @@
 #!/usr/bin/env python3
 
 # General Imports
+import argparse
 import json
 import logging
 import os
-import sys
-import re
-import argparse
-import pprint 
-import glob
-from pathlib import Path
-from typing import List, Optional
-
-# Project Imports
-import xmltodict 
 import xml.etree.ElementTree as ET
-import pandas as pd
-
 from datetime import datetime
 
-from mobile_codes import MobileCodeSearcher
-
 import ikev2_params_converter
-
 import pycountry_convert as pc
 
-mobiledb = MobileCodeSearcher('evaluation/mccmnc.csv')
+# Project Imports
+from mobile_codes import MobileCodeSearcher
+
+mobiledb = MobileCodeSearcher('device_confs/mccmnc.csv')
 
 logger = logging.getLogger(__name__)
 valid_meta=0
@@ -649,8 +638,8 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-f", "--folder", required=True, type=str, help="Folder with IPCC bundles")
 	parser.add_argument("-p", "--providers", required=True, type=str, help="File including a list of providers for which IPCC configurations are present")
-	parser.add_argument("-o", "--outputfile", required=False, default="apple_ike_configuration_parameters.json", type=str, help="File to store Apple results in JSON Format")
-	parser.add_argument("-u", "--updatefile", required=False, default="config_dirs_update_time.json", type=str, help="File to store Apple bundle update times in JSON Format")
+	parser.add_argument("-o", "--outputfile", required=False, default="devices_confs/Apple/apple_ikev2_configuration_parameters.json", type=str, help="File to store Apple results in JSON Format")
+	parser.add_argument("-u", "--updatefile", required=False, default="devices_confs/Apple/apple_ikev2_configuration_parameters_update_time.json", type=str, help="File to store Apple bundle update times in JSON Format")
 
 	args=parser.parse_args()
 	

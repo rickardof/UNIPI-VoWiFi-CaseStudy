@@ -1,11 +1,14 @@
 
-import struct
 import enum
-import hashlib ,hmac, secrets
+import hashlib
+import hmac
+import secrets
+import struct
+
 from Crypto.Cipher import AES, DES3
-from cryptography.hazmat.primitives.asymmetric import dh
-from cryptography.hazmat.primitives.asymmetric import ec, x25519
+from cryptography.hazmat.primitives.asymmetric import dh, ec, x25519
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+
 
 class TypeEnum(enum.IntEnum):
     @classmethod

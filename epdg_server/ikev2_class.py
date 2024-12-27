@@ -1,10 +1,14 @@
-import secrets
-import binascii, hashlib, socket
+import binascii
+import hashlib
 import logging
+import secrets
+import socket
+from ipaddress import ip_address
+
 import ikev2_crypto
 from ikev2_crypto import create_key
-from ipaddress import ip_address
-from scapy.all import IP, IPv6, UDP, sr1, send, sniff, load_contrib
+from scapy.all import IP, UDP, IPv6, load_contrib, send, sniff, sr1
+
 #fromt scapy.all import get_if_addr
 #from scapy.config import conf
 load_contrib('ikev2')
@@ -12,6 +16,8 @@ load_contrib('ikev2')
 
 
 from binascii import hexlify, unhexlify
+
+
 def toHex(value): # bytes hex string
     return hexlify(value).decode('utf-8')
 def fromHex(value): # hex string to bytes

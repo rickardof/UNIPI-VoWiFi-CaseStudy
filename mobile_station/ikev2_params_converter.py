@@ -1,8 +1,10 @@
-# ikev2_params_converter.py
-
 def get_ikev2_encryption_algorithm_name(encr_id, key_size=""):
     """
-    Convert IKEv2 encryption algorithm ID and key size to the algorithm name based on IANA assignments.
+    Converts the IKEv2 encryption algorithm ID and key size into the algorithm name, based on IANA assignments.
+
+    :param encr_id: Encryption algorithm ID.
+    :param key_size: (optional) Key size in bits.
+    :return: Encryption algorithm name.
     """
     encr_algorithms = {
         "1": "DES-IV64",
@@ -29,10 +31,12 @@ def get_ikev2_encryption_algorithm_name(encr_id, key_size=""):
         name += f"({','.join(key_size)}) bits"
     return name
 
-
 def get_ikev2_prf_algorithm_name(prf_id):
     """
-    Convert IKEv2 PRF algorithm ID to the algorithm name.
+    Converts the IKEv2 PRF algorithm ID into the algorithm name.
+
+    :param prf_id: PRF algorithm ID.
+    :return: PRF algorithm name.
     """
     prf_algorithms = {
         "1": "HMAC-MD5",
@@ -42,14 +46,16 @@ def get_ikev2_prf_algorithm_name(prf_id):
         "5": "HMAC-SHA2-256",
         "6": "HMAC-SHA2-384",
         "7": "HMAC-SHA2-512",
-		"8": "AES128-CMAC",
-        # Add more mappings as required
+        "8": "AES128-CMAC",
     }
     return prf_algorithms.get(prf_id, "Unknown")
 
 def get_ikev2_hash_algorithm_name(hash_id):
     """
-    Convert IKEv2 integrity (hash) algorithm ID to the algorithm name based on IANA assignments.
+    Converts the IKEv2 integrity (hash) algorithm ID into the algorithm name, based on IANA assignments.
+
+    :param hash_id: Hash algorithm ID.
+    :return: Hash algorithm name.
     """
     hash_algorithms = {
         "0": "NONE",
@@ -72,7 +78,10 @@ def get_ikev2_hash_algorithm_name(hash_id):
 
 def get_ikev2_dh_group_name(dh_id):
     """
-    Convert IKEv2 DH group ID to the group name.
+    Converts the IKEv2 DH group ID into the group name.
+
+    :param dh_id: DH group ID.
+    :return: DH group name.
     """
     dh_groups = {
         "1": "MODP 768",
@@ -89,13 +98,17 @@ def get_ikev2_dh_group_name(dh_id):
         "22": "MODP 1024s160",
         "23": "MODP 2048s224",
         "24": "MODP 2048s256",
-        # Add more mappings as required
     }
     return dh_groups.get(dh_id, "Unknown")
 
-
 def get_ikev2_dh_group_id(dh_name):
-	dh_group_list= {
+    """
+    Converts the IKEv2 DH group name into the corresponding ID.
+
+    :param dh_name: DH group name.
+    :return: DH group ID.
+    """
+    dh_group_list = {
         "MODP_1024": "2",
         "MODP_2048": "14",
         "ANY": "-1",
@@ -113,15 +126,15 @@ def get_ikev2_dh_group_id(dh_name):
         " MODP_4096": "16",
         " MODP_6144": "17",
         " MODP_8192": "18",
-	}
-	return dh_group_list.get(dh_name, "-1")
-
-
-
+    }
+    return dh_group_list.get(dh_name.strip(), "-1")
 
 def convert_ikev2_params(ikev2_params):
     """
-    Convert all IKEv2 parameters from their IDs to algorithm names.
+    Converts all IKEv2 parameters from their IDs to their respective algorithm names.
+
+    :param ikev2_params: Dictionary containing lists of IKEv2 parameters.
+    :return: Dictionary with converted algorithm names.
     """
     conversion_results = {
         "ikev2_encr_algo_list": [get_ikev2_encryption_algorithm_name(algo["id"], algo.get("key_size", [])) for algo in ikev2_params["ikev2_encr_algo_list"]],

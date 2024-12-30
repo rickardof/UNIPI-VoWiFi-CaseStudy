@@ -1,21 +1,15 @@
+import binascii
+import hashlib
 import secrets
-import binascii, hashlib, socket
-import logging
-import ikev2_crypto
-from ikev2_crypto import create_key
+import socket
+from utils import toHex, fromHex
 from ipaddress import ip_address
-from scapy.all import IP, IPv6, UDP, sr1, send, sniff, load_contrib
-#fromt scapy.all import get_if_addr
-#from scapy.config import conf
+
+import ikev2_crypto
+from scapy.all import IP, UDP, IPv6, load_contrib, sr1
+
 load_contrib('ikev2')
 
-
-
-from binascii import hexlify, unhexlify
-def toHex(value): # bytes hex string
-    return hexlify(value).decode('utf-8')
-def fromHex(value): # hex string to bytes
-    return unhexlify(value)
 
 def get_default_source_address(af_inet, interface=None):
     target_ip = '2001:4860:4860::8888' if af_inet == socket.AF_INET6 else '8.8.8.8'

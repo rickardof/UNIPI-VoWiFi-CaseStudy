@@ -343,7 +343,7 @@ TEST_CONFIG={
     "CHECK_AUTOCONF_DOMAINS":{
 
     },
-    # encr scan:
+    # encryption and integrity scan:
     "SUPPORT_IKE_ENCR_NULL":{
         "sa_list": [
             [
@@ -358,6 +358,23 @@ TEST_CONFIG={
             ]
         ],
         "key_echange": EpdgIKEv2.KE_DH_1024MODP,
+    },
+    "SUPPORT_IKE_WEAK_INT" : {
+        "sa_list": [
+            [
+                EpdgIKEv2.ENC_AES_128,
+                EpdgIKEv2.ENC_AES_256,
+                EpdgIKEv2.ENC_3DES,
+                EpdgIKEv2.PRF_SHA1,
+                EpdgIKEv2.PRF_SHA2_256,
+                EpdgIKEv2.PRF_MD5,
+                EpdgIKEv2.INT_MD5_96,
+                EpdgIKEv2.INT_SHA1_96,
+                EpdgIKEv2.INT_SHA2_256_128,
+                EpdgIKEv2.DH_1024MODP,
+            ]
+        ],
+        "key_echange": EpdgIKEv2.KE_DH_1024MODP
     },
     "SUPPORT_IKE_ENCR_DES":{
         "sa_list": [
@@ -374,11 +391,9 @@ TEST_CONFIG={
         ],
         "key_echange": EpdgIKEv2.KE_DH_1024MODP,
     },
-    "SUPPORT_IPSEC_ENCR_NULL":{
+    "SUPPORT_IKE_ENCR_3DES":{
         "sa_list": [
             [
-                EpdgIKEv2.ENC_AES_128,
-                EpdgIKEv2.ENC_AES_256,
                 EpdgIKEv2.ENC_3DES,
                 EpdgIKEv2.PRF_SHA1,
                 EpdgIKEv2.PRF_SHA2_256,
@@ -390,28 +405,56 @@ TEST_CONFIG={
             ]
         ],
         "key_echange": EpdgIKEv2.KE_DH_1024MODP,
-        "ipsec_encr": EpdgIKEv2.ENC_NULL,
-        "ipsec_integ": EpdgIKEv2.INT_MD5_96
     },
-    "SUPPORT_IPSEC_ENCR_DES":{
+
+    "SUPPORT_IKE_ENCR_3DES_DH_2048":{
         "sa_list": [
             [
-                EpdgIKEv2.ENC_AES_128,
-                EpdgIKEv2.ENC_AES_256,
-                EpdgIKEv2.ENC_DES,
+                EpdgIKEv2.ENC_3DES,
                 EpdgIKEv2.PRF_SHA1,
                 EpdgIKEv2.PRF_SHA2_256,
                 EpdgIKEv2.PRF_MD5,
                 EpdgIKEv2.INT_SHA1_96,
                 EpdgIKEv2.INT_SHA2_256_128,
                 EpdgIKEv2.INT_MD5_96,
-                EpdgIKEv2.DH_1024MODP,
+                EpdgIKEv2.DH_2048MODP,
             ]
         ],
-        "key_echange": EpdgIKEv2.KE_DH_1024MODP,
-        "ipsec_encr": EpdgIKEv2.ENC_DES,
-        "ipsec_integ": EpdgIKEv2.INT_MD5_96
-    }
+        "key_echange": EpdgIKEv2.KE_DH_2048MODP,
+    },
+
+    "SUPPORT_IKE_ENCR_3DES_DH_3072":{
+        "sa_list": [
+            [
+                EpdgIKEv2.ENC_3DES,
+                EpdgIKEv2.PRF_SHA1,
+                EpdgIKEv2.PRF_SHA2_256,
+                EpdgIKEv2.PRF_MD5,
+                EpdgIKEv2.INT_SHA1_96,
+                EpdgIKEv2.INT_SHA2_256_128,
+                EpdgIKEv2.INT_MD5_96,
+                EpdgIKEv2.DH_3072MODP,
+            ]
+        ],
+        "key_echange": EpdgIKEv2.KE_DH_3072MODP,
+    },
+
+    "SUPPORT_IKE_ENCR_3DES_DH_4096":{
+        "sa_list": [
+            [
+                EpdgIKEv2.ENC_3DES,
+                EpdgIKEv2.PRF_SHA1,
+                EpdgIKEv2.PRF_SHA2_256,
+                EpdgIKEv2.PRF_MD5,
+                EpdgIKEv2.INT_SHA1_96,
+                EpdgIKEv2.INT_SHA2_256_128,
+                EpdgIKEv2.INT_MD5_96,
+                EpdgIKEv2.DH_4096MODP,
+            ]
+        ],
+        "key_echange": EpdgIKEv2.KE_DH_4096MODP,
+    },
+
 }
 
 
@@ -422,7 +465,7 @@ def get_ids_from_domain(domain):
     mcc = m[2]
     return mcc, mnc
 
-def get_epdg_domains(filename="epdg_domains_italy.txt"):
+def get_epdg_domains(filename="epdg_domains_foreign.txt"):
     with open(filename) as file:
         return [line.rstrip() for line in file]
     return []
@@ -468,7 +511,7 @@ if __name__ == "__main__":
     name = f"{args['testcase']}_{timestamp}"
     pathlib.Path("results").mkdir(parents=True, exist_ok=True)
 
-    epdg_domains = get_epdg_domains("epdg_domains_italy.txt")
+    epdg_domains = get_epdg_domains("epdg_domains_foreign.txt")
     #epdg_domains = get_epdg_domains("ike_encr_null_domains.txt")
 
     if args['testcase'] == 'CHECK_AUTOCONF_DOMAINS':

@@ -61,21 +61,21 @@ def main():
     if args.mcc and args.mnc:
         results = searcher.search_by_mcc_mnc(args.mcc, args.mnc)
         if results:
-            print("Results found:")
+            print("> Results found:")
             for result in results:
                 print(result)
         else:
-            print("No results found for MCC={} and MNC={}".format(args.mcc, args.mnc))
+            print("> No results found for MCC={} and MNC={}".format(args.mcc, args.mnc))
     elif args.mcc:
         results = searcher.search_by_mcc(args.mcc)
         if results:
-            print("Countries found:")
+            print("> Countries found:")
             for country in results:
                 print(country)
         else:
-            print("No results found for MCC={}".format(args.mcc))
+            print("> No results found for MCC={}".format(args.mcc))
     else:
-        print("You must provide at least an MCC to perform a search.")
+        print("[!] You must provide at least an MCC to perform a search.")
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ import pathlib
 import argparse
 import subprocess
 import dns.resolver
+from tqdm import tqdm
 from ikev2_class import EpdgIKEv2
 
 TEST_CONFIG={
@@ -458,7 +459,7 @@ TEST_CONFIG={
 }
 
 
-REGEX_VOWIFI = "^epdg.epc.mnc(\d{2,3}).mcc(\d{3}).pub.3gppnetwork.org\.?$"
+REGEX_VOWIFI = r"^epdg.epc.mnc(\d{2,3}).mcc(\d{3}).pub.3gppnetwork.org\.?$"
 def get_ids_from_domain(domain):
     m = re.search(REGEX_VOWIFI, domain)
     mnc = m[1]
@@ -490,7 +491,6 @@ def resolve_domain(operator_url, ip_version="v4v6"):
     try:
         ans = dnsres.resolve(operator_url, "CNAME")
         for record in ans:
-            #print(f"CNAME {ans}")
             records.extend(resolve_domain(record.target, ip_version))
     except:
         pass
@@ -498,12 +498,12 @@ def resolve_domain(operator_url, ip_version="v4v6"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='ePDG IKE scanner for VoWiFi')
-    parser.add_argument('--interface', help='Target Network Interface', default="any")
-    parser.add_argument('--ip', help='IP Version', choices=["ipv4", "ipv6", "ipv4v6"], default="ipv4")
-    parser.add_argument('--testcase', help='Test Case', choices=TEST_CONFIG.keys())
+    parser.add_argument('--interface', required=False, help='Target Network Interface', default="any")
+    parser.add_argument('--ip', required=False, help='IP Version', choices=["ipv4", "ipv6", "ipv4v6"], default="ipv4")
+    parser.add_argument('--testcase', required=True, help='Test Case', choices=TEST_CONFIG.keys())
     args = vars(parser.parse_args())
 
-    print("starting")
+    print("> starting")
     interface = args['interface']
     ip_version = args['ip']
 
@@ -531,8 +531,10 @@ if __name__ == "__main__":
     ipsec_integ = TEST_CONFIG[args['testcase']].get('ipsec_integ')
     p = subprocess.Popen(['tcpdump', '-i', interface, '-w', f'results/{name}.pcap', 'port', '500 or 4500'], stdout=subprocess.PIPE)
     with open(f'results/{name}.txt', 'a') as results_file:
-        results_file.write(f'# key exchange: {ke}, sa_list: {sa_list}\n')
-        for domain in epdg_domains:
+        results_file.write(f'# key exchange: {ke}\n')
+        results_file.write(f'# sa_list: [{", ".join([t.transform_id.name for sublist in sa_list for t in sublist])}]\n')
+
+        for domain in tqdm(epdg_domains, desc="Scanning domains"):
             ips = resolve_domain(domain, ip_version)
             for ip in ips:
                 mcc, mnc = get_ids_from_domain(domain)
@@ -547,12 +549,6 @@ if __name__ == "__main__":
                     print(f"[{timestamp}] {domain} -> {ip}: {resp}")
                     results_file.write(f'[{timestamp}] {domain} -> {ip}: {resp}\n')
 
-    print("terminating tcpdump")
+    print("> terminating tcpdump")
     p.terminate()
-    print("done")
-            
-
-
-
-    
-    
+    print("> done")

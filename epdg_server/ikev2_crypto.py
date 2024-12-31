@@ -276,7 +276,7 @@ def dh_generate_key(group):
     dh_type, params = DH_GROUPS[group]
     if dh_type == DHType.DH_MODP:
         p, g, dh_key_size = params
-        print(p, g, dh_key_size)
+        # print("> DH params: \n> p: " + str(p) + "\n> g: " + str(g) + "\n> key size: " + str(dh_key_size))
         dh_private_key = dh.DHParameterNumbers(p, g).parameters().generate_private_key()
         dh_public_key_bytes = dh_private_key.public_key().public_numbers().y.to_bytes(dh_key_size, 'big')
     elif dh_type == DHType.DH_ECDH:
@@ -301,7 +301,7 @@ def dh_calculate_shared_key(group, peer_public_key_bytes, dh_key_size, dh_privat
         peer_public_numbers = dh.DHPublicNumbers(int.from_bytes(peer_public_key_bytes, byteorder='big'), dh.DHParameterNumbers(p, g))
         peer_public_key = peer_public_numbers.public_key()
         dh_shared_key = dh_private_key.exchange(peer_public_key)
-        print('DIFFIE-HELLMAN KEY', dh_shared_key)
+        print('> DIFFIE-HELLMAN KEY', dh_shared_key)
     elif dh_type == DHType.DH_ECDH:
         peer_public_numbers = ec.EllipticCurvePublicNumbers(int.from_bytes(peer_public_key_bytes[:dh_key_size], 'big'), int.from_bytes(peer_public_key_bytes[dh_key_size:], 'big'), params)
         peer_public_key = peer_public_numbers.public_key()

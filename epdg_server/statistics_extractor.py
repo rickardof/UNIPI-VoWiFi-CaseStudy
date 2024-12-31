@@ -61,5 +61,5 @@ for item in list_2048:
         count_italian += 1
 
 # Stampa i risultati
-print(f"Il totale degli elementi unici (complessivo) è: {count_overall}")
-print(f"Il totale degli elementi unici con MCC italiano è: {count_italian}")
+print(f"> Il totale degli elementi unici (complessivo) è: {count_overall}")
+print(f"> Il totale degli elementi unici con MCC italiano è: {count_italian}")

@@ -2,7 +2,7 @@ import binascii
 import hashlib
 import secrets
 import socket
-from utils import toHex, fromHex
+from utils import toHex
 from ipaddress import ip_address
 
 import ikev2_crypto
@@ -137,13 +137,13 @@ class EpdgIKEv2(object):
     @staticmethod
     def contains_no_proposal_chosen(packet):
         notify_packets = EpdgIKEv2.get_notify_payloads(packet)
-        print(notify_packets)
+        print("[!] No proposal chosen: " + str(notify_packets))
         return any([n for n in notify_packets if n[0] == 14])
     
     @staticmethod
     def contains_invalid_ke(packet):
         notify_packets = EpdgIKEv2.get_notify_payloads(packet)
-        print(notify_packets)
+        print("[!] Invalid ke: " + str(notify_packets))
         return any([n for n in notify_packets if n[0] == 17])
         
     @staticmethod
@@ -224,7 +224,7 @@ class EpdgIKEv2(object):
             self.sock.setsockopt(socket.SOL_SOCKET, 25, f'{self.interface}\0'.encode('utf-8'))
         self.sock.bind((self.src_addr, self.src_port))
         self.src_port = self.sock.getsockname()[1]
-        print(f"binding to {self.sock.getsockname()}")
+        print(f"> Binding to {self.sock.getsockname()[0]}:{self.sock.getsockname()[1]}")
 
         if self.imsi == "generate":
             self.imsi = f'0{self.mcc}{self.mnc}'.ljust(16, '0') #3GPP TS 23.003
@@ -273,16 +273,16 @@ class EpdgIKEv2(object):
             IKEv2_Notify(next_payload = 'Notify', type = 'NAT_DETECTION_SOURCE_IP', notify = nat_det_src) /\
             IKEv2_Notify(next_payload = 'None', type = 'NAT_DETECTION_DESTINATION_IP', notify = nat_det_dst)
         if cookie:
-            print("append cookie")
+            print("> Append cookie")
             EpdgIKEv2.append_cookie(packet_sa_init, cookie)
         return packet_sa_init
 
     def ike_sa_init(self, sa_list, key_exchange, cookie = None):
         packet_sa_init = self.ike_sa_init_create_packet(sa_list, key_exchange, cookie)
-        response = sr1(packet_sa_init, iface=self.interface, timeout = 3, verbose = 0)
+        response = sr1(packet_sa_init, timeout = 3, verbose = 0)
         if not cookie and EpdgIKEv2.get_cookie(response):
             cookie = EpdgIKEv2.get_cookie(response)
-            print(f"retry with cookie {cookie}")
+            print(f"> Retry with cookie {cookie}")
             return self.ike_sa_init(sa_list=sa_list, key_exchange=key_exchange, cookie=cookie)
         if response and IKEv2 in response and response[IKEv2].flags == 'Response':
             return self.ike_sa_init_analyze_response(packet_sa_init[IKEv2], response[IKEv2])
@@ -291,8 +291,11 @@ class EpdgIKEv2(object):
             
 
     def ike_sa_init_analyze_response(self, request, answer):
-        print(f"spi init {answer.init_SPI} {self.spi_i}")
-        print(answer.show())
+        if answer.show() is not None:
+            print(f"> Spi init {answer.init_SPI} {self.spi_i}: " + answer.show())
+        else:
+            print(f"> Spi init {answer.init_SPI} {self.spi_i}: [No additional details]")
+
         assert answer.init_SPI == self.spi_i
         self.spi_r = answer.resp_SPI
         try:

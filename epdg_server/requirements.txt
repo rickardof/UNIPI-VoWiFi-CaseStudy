@@ -1,6 +1,5 @@
-pycrypto
-pycryptodome
-cryptography
-dnspython
+pycryptodome==3.21.0
+cryptography==44.0.0
+dnspython==2.7.0
 scapy @ https://github.com/secdev/scapy/archive/refs/heads/master.zip
-tqdm
+tqdm==4.67.1

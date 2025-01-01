@@ -44,8 +44,6 @@ def main():
 
     sa_list = TEST_CONFIG[args["testcase"]]["sa_list"]  # security association configurations
     ke = TEST_CONFIG[args["testcase"]]["key_echange"]  # key exchange algorithm
-    ipsec_encr = TEST_CONFIG[args["testcase"]].get("ipsec_encr")  # optional ipsec encryption settings
-    ipsec_integ = TEST_CONFIG[args["testcase"]].get("ipsec_integ")  # optional ipsec integrity settings
 
     # start packet capture using tcpdump
     p = subprocess.Popen(
@@ -73,16 +71,9 @@ def main():
                 resp = ike.ike_sa_init(sa_list, key_exchange=ke)
 
                 timestamp = time.strftime("%Y%m%d-%H%M%S")
-                if not ipsec_encr:
-                    # log the response for ike_sa_init if no ipsec encryption is required
-                    print(f"[{timestamp}] {domain} -> {ip}: {resp}")
-                    results_file.write(f"[{timestamp}] {domain} -> {ip}: {resp}\n")
-                elif "successfull" in resp:
-                    # if the initial exchange is successful, proceed with ike_auth
-                    # ike_auth completes authentication and sets up ipsec sas
-                    resp = ike.ike_auth(ipsec_encr, ipsec_integ)
-                    print(f"[{timestamp}] {domain} -> {ip}: {resp}")
-                    results_file.write(f"[{timestamp}] {domain} -> {ip}: {resp}\n")
+                   
+                print(f"[{timestamp}] {domain} -> {ip}: {resp}")
+                results_file.write(f"[{timestamp}] {domain} -> {ip}: {resp}\n")
 
     print("> Terminating tcpdump")
     p.terminate()

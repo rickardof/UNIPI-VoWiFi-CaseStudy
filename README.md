@@ -14,12 +14,3 @@ pip install -r requirements.txt
 ```
 
 
-### Prepare the `mobile_station` environment:
-``` bash
-cd mobile_station
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-#

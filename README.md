@@ -13,4 +13,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+### To execute 
 
+./server_scan.py --testcase SUPPORT_DH_1024_MODP (example)

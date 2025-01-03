@@ -468,9 +468,9 @@ class EpdgIKEv2(object):
 
     def ike_sa_init_analyze_response(self, request, answer):
         if answer.show() is not None:
-            print(f"> Spi init {answer.init_SPI} {self.spi_i}: " + answer.show())
+            print(f"> Security parameter index (SPI) init {answer.init_SPI} {self.spi_i}: " + answer.show())
         else:
-            print(f"> Spi init {answer.init_SPI} {self.spi_i}: [No additional details]")
+            print(f"> Security parameter index (SPI) init {answer.init_SPI} {self.spi_i}: [No additional details]")
 
         assert answer.init_SPI == self.spi_i
         self.spi_r = answer.resp_SPI

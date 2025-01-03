@@ -4,14 +4,14 @@ TEST_CONFIG = {
     "SUPPORT_ENC_NULL_DH_768MODP": {
         "sa_list": [
             [
-                EpdgIKEv2.ENC_NULL,
-                EpdgIKEv2.PRF_SHA1,
+                EpdgIKEv2.ENC_NULL, # encryption algorithms
+                EpdgIKEv2.PRF_SHA1, # pseudo-random functions
                 EpdgIKEv2.PRF_SHA2_256,
-                EpdgIKEv2.PRF_MD5,
-                EpdgIKEv2.INT_SHA1_96,
+                EpdgIKEv2.PRF_MD5, 
+                EpdgIKEv2.INT_SHA1_96, # (integrity) hashing algorithm
                 EpdgIKEv2.INT_SHA2_256_128,
                 EpdgIKEv2.INT_MD5_96,
-                EpdgIKEv2.DH_768MODP,
+                EpdgIKEv2.DH_768MODP, # diffie-hellman key exchange
             ]
         ],
         "key_echange": EpdgIKEv2.KE_DH_768MODP,

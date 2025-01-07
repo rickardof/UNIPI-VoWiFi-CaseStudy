@@ -15,5 +15,5 @@ pip install -r requirements.txt
 
 ### To execute (Example)
 ``` bash
-./server_scan.py --testcase SUPPORT_DH_1024_MODP 
+./server_scan.py --testcase SUPPORT_DH_1024MODP 
 ```
